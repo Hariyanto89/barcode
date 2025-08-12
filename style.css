@@ -1,0 +1,44 @@
+body {
+  background: #000;
+  color: white;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  color: #00b4d8;
+}
+
+.input-area {
+  margin: 20px 0;
+}
+
+input {
+  padding: 10px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  width: 250px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #00b4d8;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #0096c7;
+}
+
+canvas {
+  background: #000;
+  margin-top: 20px;
+  border: 2px solid #00b4d8;
+  border-radius: 8px;
+}
