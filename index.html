@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Stacked Barcode Biru</title>
+  <title>Code128 Stacked Biru</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -37,38 +37,61 @@
   </style>
 </head>
 <body>
-  <h1>Barcode Dua Tingkat (Stacked)</h1>
+  <h1>Barcode Code128 Dua Tingkat</h1>
   <input type="text" id="barcodeInput" placeholder="Masukkan teks atau link">
-  <button onclick="generateBarcode()">Generate</button>
+  <button onclick="generateStackedBarcode()">Generate</button>
   <div>
-    <canvas id="barcodeCanvas"></canvas>
+    <canvas id="barcodeCanvas" width="600" height="200"></canvas>
   </div>
 
   <!-- bwip-js CDN -->
   <script src="https://unpkg.com/bwip-js/dist/bwip-js-min.js"></script>
   <script>
-    function generateBarcode() {
+    function generateStackedBarcode() {
       const text = document.getElementById('barcodeInput').value.trim();
       if (!text) {
         alert('Masukkan teks atau link terlebih dahulu!');
         return;
       }
 
-      try {
-        bwipjs.toCanvas('barcodeCanvas', {
-          bcid: 'pdf417',        // PDF417 mendukung multi-row (stacked)
-          text: text,
-          scale: 3,              // Skala besar
-          height: 5,             // Tinggi tiap bar
-          columns: 2,            // Membagi jadi 2 kolom/row
-          includetext: false,    // Tanpa tulisan di bawah
-          backgroundcolor: 'FFFFFF',
-          barcolor: '0000FF'     // Biru
-        });
-      } catch (e) {
-        console.error(e);
-        alert('Gagal membuat barcode');
-      }
+      // Bagi teks jadi 2 bagian
+      const mid = Math.ceil(text.length / 2);
+      const part1 = text.substring(0, mid);
+      const part2 = text.substring(mid);
+
+      const canvas = document.getElementById('barcodeCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // Bersihkan canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Buat barcode pertama
+      const tempCanvas1 = document.createElement('canvas');
+      bwipjs.toCanvas(tempCanvas1, {
+        bcid: 'code128',
+        text: part1,
+        scale: 3,
+        height: 40,
+        includetext: false,
+        backgroundcolor: 'FFFFFF',
+        barcolor: '0000FF'
+      });
+
+      // Buat barcode kedua
+      const tempCanvas2 = document.createElement('canvas');
+      bwipjs.toCanvas(tempCanvas2, {
+        bcid: 'code128',
+        text: part2,
+        scale: 3,
+        height: 40,
+        includetext: false,
+        backgroundcolor: 'FFFFFF',
+        barcolor: '0000FF'
+      });
+
+      // Gambar keduanya di canvas utama (stacked)
+      ctx.drawImage(tempCanvas1, 10, 10);
+      ctx.drawImage(tempCanvas2, 10, 60);
     }
   </script>
 </body>
