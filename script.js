@@ -1,33 +1,25 @@
-document.getElementById("generateBtn").addEventListener("click", shortenAndGenerate);
+document.getElementById("generateBtn").addEventListener("click", generateQRAndBarcode);
 
-function shortenAndGenerate() {
-  const longUrl = document.getElementById("linkInput").value.trim();
-  if (!longUrl) {
+function generateQRAndBarcode() {
+  const link = document.getElementById("linkInput").value.trim();
+  if (!link) {
     alert("Masukkan link terlebih dahulu!");
     return;
   }
 
-  fetch(`https://api.shrtco.de/v2/shorten?url=${encodeURIComponent(longUrl)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.ok) {
-        const shortUrl = data.result.full_short_link;
-        showShortLink(shortUrl);
-        generateMountainBarcode(shortUrl);
-      } else {
-        alert("Gagal memendekkan link: " + data.error);
-      }
-    })
-    .catch(err => {
-      alert("Error koneksi: " + err);
-    });
-}
+  // Buat QR Code di canvas
+  const qrCanvas = document.getElementById("qrCanvas");
+  QRCode.toCanvas(qrCanvas, link, { width: 200 }, function (error) {
+    if (error) {
+      console.error(error);
+      alert("Gagal membuat QR Code");
+    } else {
+      console.log("QR Code berhasil dibuat");
+    }
+  });
 
-function showShortLink(shortUrl) {
-  document.getElementById("shortLink").style.display = "block";
-  const linkEl = document.querySelector("#shortLink a");
-  linkEl.textContent = shortUrl;
-  linkEl.href = shortUrl;
+  // Buat Barcode Gunung
+  generateMountainBarcode(link);
 }
 
 function generateMountainBarcode(data) {
@@ -48,7 +40,6 @@ function generateMountainBarcode(data) {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, 500, 200);
 
-  // Buat tiga puncak di atas barcode
   const peak1 = 20;
   const peak2 = 35;
   const peak3 = 25;
@@ -57,7 +48,7 @@ function generateMountainBarcode(data) {
     let isBar = false;
     for (let y = 0; y < imgData.height; y++) {
       const idx = (y * imgData.width + x) * 4;
-      if (imgData.data[idx] === 0) { 
+      if (imgData.data[idx] === 0) {
         isBar = true;
         break;
       }
