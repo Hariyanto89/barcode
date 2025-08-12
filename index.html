@@ -1,123 +1,75 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR & Barcode Generator – Dua Baris Teks Custom</title>
+  <meta charset="UTF-8">
+  <title>Stacked Barcode Biru</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      color: #333;
       text-align: center;
-      padding: 20px;
+      margin: 40px;
+      background-color: #f5f5f5;
     }
-    h1 {
-      color: #023e8a;
+    canvas {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     input {
-      width: 80%;
-      max-width: 500px;
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-bottom: 10px;
+      width: 400px;
+      padding: 8px;
+      font-size: 16px;
     }
     button {
-      padding: 10px 20px;
+      padding: 8px 14px;
+      font-size: 16px;
       background: #023e8a;
       color: white;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
+      border-radius: 4px;
+      margin-left: 8px;
     }
     button:hover {
       background: #0353a4;
     }
-    .container {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .card {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      min-width: 260px;
-    }
-    canvas {
-      background: #fff;
-      border: 1px solid #ddd;
-      margin-bottom: 8px;
-    }
-    .custom-text {
-      font-size: 13px;
-      color: #023e8a;
-      line-height: 1.2;
-      word-break: break-all;
-    }
   </style>
 </head>
 <body>
-
-<h1>QR & Barcode Generator</h1>
-<p>Barcode muncul bersih tanpa teks otomatis. Teks link di bawahnya dibagi 2 baris.</p>
-
-<input id="linkInput" type="text"
-  placeholder="Masukkan link di sini"
-  value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff">
-<br>
-<button id="generateBtn">Generate</button>
-
-<div class="container">
-  <div class="card">
-    <h3>QR Code</h3>
-    <canvas id="qrCanvas" width="200" height="200"></canvas>
+  <h1>Barcode Dua Tingkat (Stacked)</h1>
+  <input type="text" id="barcodeInput" placeholder="Masukkan teks atau link">
+  <button onclick="generateBarcode()">Generate</button>
+  <div>
+    <canvas id="barcodeCanvas"></canvas>
   </div>
-  <div class="card">
-    <h3>Barcode (bersih)</h3>
-    <canvas id="barcodeCanvas" width="400" height="100"></canvas>
-    <div class="custom-text" id="textLine1"></div>
-    <div class="custom-text" id="textLine2"></div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-<script>
-  document.getElementById("generateBtn").addEventListener("click", () => {
-    const link = document.getElementById("linkInput").value.trim();
-    if (!link) return alert("Masukkan link terlebih dahulu!");
+  <!-- bwip-js CDN -->
+  <script src="https://unpkg.com/bwip-js/dist/bwip-js-min.js"></script>
+  <script>
+    function generateBarcode() {
+      const text = document.getElementById('barcodeInput').value.trim();
+      if (!text) {
+        alert('Masukkan teks atau link terlebih dahulu!');
+        return;
+      }
 
-    // Generate QR
-    const qrCanvas = document.getElementById("qrCanvas");
-    QRCode.toCanvas(qrCanvas, link, { width: 200, margin: 2 }, err => {
-      if (err) console.error("QR error:", err);
-    });
-
-    // Generate Barcode (bersih)
-    JsBarcode("#barcodeCanvas", link, {
-      format: "CODE128",
-      displayValue: false,
-      lineColor: "#023e8a",
-      background: "#ffffff",
-      width: 2,
-      height: 80,
-      margin: 10
-    });
-
-    // Split link jadi 2 baris
-    const mid = Math.ceil(link.length / 2);
-    document.getElementById("textLine1").textContent = link.slice(0, mid);
-    document.getElementById("textLine2").textContent = link.slice(mid);
-  });
-</script>
-
+      try {
+        bwipjs.toCanvas('barcodeCanvas', {
+          bcid: 'pdf417',        // PDF417 mendukung multi-row (stacked)
+          text: text,
+          scale: 3,              // Skala besar
+          height: 5,             // Tinggi tiap bar
+          columns: 2,            // Membagi jadi 2 kolom/row
+          includetext: false,    // Tanpa tulisan di bawah
+          backgroundcolor: 'FFFFFF',
+          barcolor: '0000FF'     // Biru
+        });
+      } catch (e) {
+        console.error(e);
+        alert('Gagal membuat barcode');
+      }
+    }
+  </script>
 </body>
 </html>
