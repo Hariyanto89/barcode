@@ -1,11 +1,32 @@
-document.getElementById("generateBtn").addEventListener("click", generateBarcode);
+document.getElementById("generateBtn").addEventListener("click", shortenAndGenerate);
 
-function generateBarcode() {
-  const text = document.getElementById("barcodeData").value;
+function shortenAndGenerate() {
+  const longUrl = document.getElementById("linkInput").value.trim();
+  if (!longUrl) {
+    alert("Masukkan link terlebih dahulu!");
+    return;
+  }
 
-  // Buat barcode di canvas sementara
+  // API shortener (is.gd)
+  fetch(`https://is.gd/create.php?format=simple&url=${encodeURIComponent(longUrl)}`)
+    .then(res => res.text())
+    .then(shortUrl => {
+      document.getElementById("shortLink").style.display = "block";
+      const linkEl = document.querySelector("#shortLink a");
+      linkEl.textContent = shortUrl;
+      linkEl.href = shortUrl;
+
+      generateMountainBarcode(shortUrl);
+    })
+    .catch(err => {
+      alert("Gagal memendekkan link: " + err);
+    });
+}
+
+function generateMountainBarcode(data) {
+  // Buat barcode normal di canvas sementara
   const tempCanvas = document.createElement("canvas");
-  JsBarcode(tempCanvas, text, {
+  JsBarcode(tempCanvas, data, {
     format: "CODE128",
     displayValue: false,
     background: "#ffffff",
@@ -21,14 +42,23 @@ function generateBarcode() {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, 500, 200);
 
-  // gambar garis sesuai pola gunung (hitam di atas putih)
+  // Tiga puncak gunung
+  const peak1 = Math.random() * 20 + 20; // tinggi tambahan puncak 1
+  const peak2 = Math.random() * 20 + 40; // tinggi tambahan puncak 2
+  const peak3 = Math.random() * 20 + 30; // tinggi tambahan puncak 3
+
   for (let x = 0; x < imgData.width; x++) {
     const isBar = imgData.data[x * 4] === 0 && imgData.data[x * 4 + 1] === 0 && imgData.data[x * 4 + 2] === 0;
     if (isBar) {
-      // bikin siluet gunung dengan beberapa puncak
-      let height = 100 
-                 + 20 * Math.sin((x / imgData.width) * Math.PI * 2) // gunung 1
-                 + 15 * Math.sin((x / imgData.width) * Math.PI * 4); // gunung 2
+      // Bentuk tiga puncak dengan ujung runcing
+      let height = 100
+                 + peak1 * Math.sin((x / imgData.width) * Math.PI) // puncak 1
+                 + peak2 * Math.sin((x / imgData.width) * Math.PI * 2) // puncak 2
+                 + peak3 * Math.sin((x / imgData.width) * Math.PI * 3); // puncak 3
+
+      // Runcing → tambahkan variasi segitiga
+      height += Math.abs(Math.sin(x / 3)) * 5;
+
       ctx.fillStyle = "#000000";
       ctx.fillRect(x, 200 - height, 1, height);
     }
