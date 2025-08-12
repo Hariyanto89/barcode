@@ -72,13 +72,14 @@
 
       // Generate Barcode normal warna biru
       JsBarcode("#barcodeCanvas", link, {
-        format: "CODE128",
-        displayValue: true,
-        lineColor: "#0000ff",
-        background: "#ffffff",
-        width: 2,
-        height: 80
-      });
+  format: "CODE128",
+  displayValue: false, // ini mematikan tulisan
+  lineColor: "#0000ff",
+  background: "#ffffff",
+  width: 2,
+  height: 80
+});
+
     });
   </script>
 
