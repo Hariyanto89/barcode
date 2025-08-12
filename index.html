@@ -1,109 +1,122 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR & Barcode Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR & Barcode Generator – Dua Baris Teks Custom</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #333;
       text-align: center;
-      background-color: #f8f9fa;
       padding: 20px;
+    }
+    h1 {
+      color: #023e8a;
+    }
+    input {
+      width: 80%;
+      max-width: 500px;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #023e8a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #0353a4;
     }
     .container {
       display: flex;
       justify-content: center;
       gap: 40px;
       margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      min-width: 260px;
     }
     canvas {
-      background: white;
-      padding: 10px;
+      background: #fff;
       border: 1px solid #ddd;
+      margin-bottom: 8px;
     }
-    .barcode-text {
-      margin-top: 5px;
-      font-size: 14px;
+    .custom-text {
+      font-size: 13px;
       color: #023e8a;
       line-height: 1.2;
-    }
-    input, button {
-      padding: 8px;
-      font-size: 14px;
-    }
-    button {
-      background-color: #023e8a;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0353a4;
+      word-break: break-all;
     }
   </style>
 </head>
 <body>
 
-<h2>QR & Barcode Generator (Nuansa DIPAYANG)</h2>
-<p>Masukkan link untuk membuat QR Code & Barcode</p>
+<h1>QR & Barcode Generator</h1>
+<p>Barcode muncul bersih tanpa teks otomatis. Teks link di bawahnya dibagi 2 baris.</p>
 
-<input type="text" id="linkInput" placeholder="Masukkan link di sini" size="50">
+<input id="linkInput" type="text"
+  placeholder="Masukkan link di sini"
+  value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff">
+<br>
 <button id="generateBtn">Generate</button>
 
 <div class="container">
-  <div>
-    <canvas id="qrCanvas"></canvas>
-    <div class="barcode-text" id="qrTextLine1"></div>
-    <div class="barcode-text" id="qrTextLine2"></div>
+  <div class="card">
+    <h3>QR Code</h3>
+    <canvas id="qrCanvas" width="200" height="200"></canvas>
   </div>
-  <div>
-    <canvas id="barcodeCanvas"></canvas>
-    <div class="barcode-text" id="barcodeTextLine1"></div>
-    <div class="barcode-text" id="barcodeTextLine2"></div>
+  <div class="card">
+    <h3>Barcode (bersih)</h3>
+    <canvas id="barcodeCanvas" width="400" height="100"></canvas>
+    <div class="custom-text" id="textLine1"></div>
+    <div class="custom-text" id="textLine2"></div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <script>
-document.getElementById("generateBtn").addEventListener("click", generateQRAndBarcode);
+  document.getElementById("generateBtn").addEventListener("click", () => {
+    const link = document.getElementById("linkInput").value.trim();
+    if (!link) return alert("Masukkan link terlebih dahulu!");
 
-function generateQRAndBarcode() {
-  const link = document.getElementById("linkInput").value.trim();
-  if (!link) {
-    alert("Masukkan link terlebih dahulu!");
-    return;
-  }
+    // Generate QR
+    const qrCanvas = document.getElementById("qrCanvas");
+    QRCode.toCanvas(qrCanvas, link, { width: 200, margin: 2 }, err => {
+      if (err) console.error("QR error:", err);
+    });
 
-  // Buat QR Code
-  const qrCanvas = document.getElementById("qrCanvas");
-  QRCode.toCanvas(qrCanvas, link, { width: 200, color: { dark: "#023e8a" } }, function (error) {
-    if (error) {
-      console.error(error);
-      alert("Gagal membuat QR Code");
-    }
+    // Generate Barcode (bersih)
+    JsBarcode("#barcodeCanvas", link, {
+      format: "CODE128",
+      displayValue: false,
+      lineColor: "#023e8a",
+      background: "#ffffff",
+      width: 2,
+      height: 80,
+      margin: 10
+    });
+
+    // Split link jadi 2 baris
+    const mid = Math.ceil(link.length / 2);
+    document.getElementById("textLine1").textContent = link.slice(0, mid);
+    document.getElementById("textLine2").textContent = link.slice(mid);
   });
-
-  // Buat Barcode tanpa tulisan
-  JsBarcode("#barcodeCanvas", link, {
-    format: "CODE128",
-    displayValue: false,
-    background: "#ffffff",
-    lineColor: "#023e8a",
-    width: 2,
-    height: 80
-  });
-
-  // Tampilkan dua baris teks custom
-  const midPoint = Math.ceil(link.length / 2);
-  document.getElementById("barcodeTextLine1").textContent = link.slice(0, midPoint);
-  document.getElementById("barcodeTextLine2").textContent = link.slice(midPoint);
-
-  // QR code teks juga dua baris (opsional)
-  document.getElementById("qrTextLine1").textContent = link.slice(0, midPoint);
-  document.getElementById("qrTextLine2").textContent = link.slice(midPoint);
-}
 </script>
 
 </body>
