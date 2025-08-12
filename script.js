@@ -28,17 +28,17 @@ function generateMountainBarcode(data) {
     format: "CODE128",
     displayValue: false,
     background: "#ffffff",
-    lineColor: "#000000",
+    lineColor: "#0000ff", // biru
     width: 2,
     height: 80
-  });
+});
 
   const ctx = document.getElementById("barcodeCanvas").getContext("2d");
   const imgData = tempCanvas.getContext("2d").getImageData(0, 0, tempCanvas.width, tempCanvas.height);
 
   ctx.clearRect(0, 0, 500, 200);
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, 500, 200);
+  ctx.fillStyle = "#0000ff"; // biru
+ctx.fillRect(x, 200 - (80 + mountainExtra), 1, 80 + mountainExtra);
 
   const peak1 = 20;
   const peak2 = 35;
