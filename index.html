@@ -1,42 +1,86 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>QR → Barcode Gunung DIPAYANG</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR & Barcode Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      color: #023e8a;
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #023e8a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    canvas {
+      margin-top: 20px;
+      background: white;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>QR → Barcode Gunung DIPAYANG</h1>
 
-    <div class="input-area">
-      <input id="linkInput" type="text" placeholder="Masukkan link panjang"
-        value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff" />
-      <button id="generateBtn">Buat QR & Barcode Gunung</button>
-    </div>
+  <h1>QR & Barcode Generator</h1>
+  <input type="text" id="linkInput" placeholder="Masukkan link...">
+  <br>
+  <button id="generateBtn">Generate</button>
 
-    <div class="output">
-      <div class="card">
-        <h3>QR Code</h3>
-        <canvas id="qrCanvas" width="220" height="220"></canvas>
-        <a id="downloadQr" class="btn" style="display:none;">Download QR</a>
-      </div>
+  <h2>QR Code</h2>
+  <canvas id="qrCanvas"></canvas>
 
-      <div class="card">
-        <h3>Barcode Gunung (biru)</h3>
-        <canvas id="barcodeCanvas" width="620" height="220"></canvas>
-        <a id="downloadBarcode" class="btn" style="display:none;">Download Barcode</a>
-      </div>
-    </div>
+  <h2>Barcode</h2>
+  <canvas id="barcodeCanvas"></canvas>
 
-    <p class="note">Catatan: barcode linear (Code128) lebih sensitif terhadap perubahan — desain ini menjaga lebar & posisi garis agar tetap aman.</p>
-  </main>
-
-  <!-- libs -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+  <!-- Library QRCode.js -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <!-- Library JsBarcode -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", function () {
+      const link = document.getElementById("linkInput").value.trim();
+      if (!link) {
+        alert("Masukkan link terlebih dahulu!");
+        return;
+      }
+
+      // Generate QR Code
+      QRCode.toCanvas(document.getElementById("qrCanvas"), link, { width: 200 }, function (error) {
+        if (error) {
+          console.error(error);
+          alert("Gagal membuat QR Code");
+        } else {
+          console.log("QR Code berhasil dibuat");
+        }
+      });
+
+      // Generate Barcode normal warna biru
+      JsBarcode("#barcodeCanvas", link, {
+        format: "CODE128",
+        displayValue: true,
+        lineColor: "#0000ff",
+        background: "#ffffff",
+        width: 2,
+        height: 80
+      });
+    });
+  </script>
+
 </body>
 </html>
