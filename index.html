@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Barcode Gunung DIPAYANG</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR ke Barcode Gunung DIPAYANG</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Barcode Gunung DIPAYANG</h1>
-  
+  <h1>QR ke Barcode Gunung DIPAYANG</h1>
+
   <div class="input-area">
-    <input id="linkInput" type="text" placeholder="Masukkan link panjang" value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff"/>
-    <button id="generateBtn">Buat Barcode Gunung</button>
+    <input id="linkInput" type="text" placeholder="Masukkan link panjang"
+      value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff"/>
+    <button id="generateBtn">Buat QR & Barcode Gunung</button>
   </div>
 
-  <p id="shortLink" style="display:none;">
-    Link pendek: <a href="#" target="_blank"></a>
-  </p>
-  
-  <canvas id="barcodeCanvas" width="500" height="200"></canvas>
+  <div class="output">
+    <div>
+      <h3>QR Code</h3>
+      <canvas id="qrCanvas"></canvas>
+    </div>
+    <div>
+      <h3>Barcode Gunung</h3>
+      <canvas id="barcodeCanvas" width="500" height="200"></canvas>
+    </div>
+  </div>
 
+  <!-- Library QR Code -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+  <!-- Library Barcode -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script src="script.js"></script>
 </body>
