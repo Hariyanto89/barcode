@@ -1,35 +1,42 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR ke Barcode Gunung DIPAYANG</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QR → Barcode Gunung DIPAYANG</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>QR ke Barcode Gunung DIPAYANG</h1>
+  <main>
+    <h1>QR → Barcode Gunung DIPAYANG</h1>
 
-  <div class="input-area">
-    <input id="linkInput" type="text" placeholder="Masukkan link panjang"
-      value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff"/>
-    <button id="generateBtn">Buat QR & Barcode Gunung</button>
-  </div>
-
-  <div class="output">
-    <div>
-      <h3>QR Code</h3>
-      <canvas id="qrCanvas"></canvas>
+    <div class="input-area">
+      <input id="linkInput" type="text" placeholder="Masukkan link panjang"
+        value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff" />
+      <button id="generateBtn">Buat QR & Barcode Gunung</button>
     </div>
-    <div>
-      <h3>Barcode Gunung</h3>
-      <canvas id="barcodeCanvas" width="500" height="200"></canvas>
-    </div>
-  </div>
 
-  <!-- Library QR Code -->
+    <div class="output">
+      <div class="card">
+        <h3>QR Code</h3>
+        <canvas id="qrCanvas" width="220" height="220"></canvas>
+        <a id="downloadQr" class="btn" style="display:none;">Download QR</a>
+      </div>
+
+      <div class="card">
+        <h3>Barcode Gunung (biru)</h3>
+        <canvas id="barcodeCanvas" width="620" height="220"></canvas>
+        <a id="downloadBarcode" class="btn" style="display:none;">Download Barcode</a>
+      </div>
+    </div>
+
+    <p class="note">Catatan: barcode linear (Code128) lebih sensitif terhadap perubahan — desain ini menjaga lebar & posisi garis agar tetap aman.</p>
+  </main>
+
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
-  <!-- Library Barcode -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
   <script src="script.js"></script>
 </body>
 </html>
