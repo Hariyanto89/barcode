@@ -10,10 +10,13 @@
   <h1>Barcode Gunung DIPAYANG</h1>
   
   <div class="input-area">
-    <input id="barcodeData" type="text" placeholder="Masukkan teks/angka" value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff">
+    <input id="linkInput" type="text" placeholder="Masukkan link panjang" 
+      value="https://www.appsheet.com/newshortcut/b55336d5-d32e-4980-87d2-6b6829368aff">
     <button id="generateBtn">Buat Barcode Gunung</button>
   </div>
 
+  <p id="shortLink" style="display:none;">Link pendek: <a href="#" target="_blank"></a></p>
+  
   <canvas id="barcodeCanvas" width="500" height="200"></canvas>
 
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
