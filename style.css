@@ -36,8 +36,15 @@ button:hover {
   background: #023e8a;
 }
 
+.output {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
 canvas {
   background: white;
-  margin-top: 20px;
   border: 1px solid #ccc;
+  padding: 5px;
 }
